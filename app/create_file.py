@@ -7,17 +7,18 @@ def create_directory(path: str) -> None:
     os.makedirs(path, exist_ok=True)
 
 
-def write_to_file(file_path: str, append: bool = False) -> None:
-    mode = "a" if append else "w"
-    with open(file_path, mode) as file:
+def write_to_file(file_path: str) -> None:
+    with open(file_path, "a") as file:
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         file.write(f"{timestamp}\n")
+        counter = 0
         while True:
             content = input("Enter content line: ")
             if content.lower() == "stop":
                 file.write("\n")
                 break
-            file.write(f"{content}\n")
+            counter += 1
+            file.write(f"{counter} {content}\n")
 
 
 def main() -> None:
@@ -40,7 +41,7 @@ def main() -> None:
         create_directory(dir_path)
     elif "-f" in args:
         file_name = args[args.index("-f") + 1]
-        write_to_file(file_name, append=os.path.exists(file_name))
+        write_to_file(file_name)
     else:
         print("Invalid arguments. Use -d for directory and/or -f for file.")
 
